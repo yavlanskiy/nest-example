@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -22,5 +23,20 @@ export class TaskService {
 
   findById(id: number) {
     return this.tasks.find((task) => task.id === id);
+  }
+
+  create(dto: CreateTaskDto) {
+
+    const { title } = dto;
+
+
+    const newTask = {
+        id: this.tasks.length + 1,
+        title: title,
+        isCompleted: false,
+      }
+    
+    this.tasks.push(newTask)
+    return this.tasks;
   }
 }
