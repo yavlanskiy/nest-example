@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Patch, Post, Put } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -32,5 +32,10 @@ export class TaskController {
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTaskDto) {
     return this.taskService.update(+id, dto);
+  }
+
+  @Patch(':id')
+  patchUpdate(@Param('id') id: string, @Body() dto: Partial<UpdateTaskDto>) {
+    return this.taskService.patchUpdate(+id, dto);
   }
 }
