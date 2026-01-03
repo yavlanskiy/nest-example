@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -22,7 +23,12 @@ export class TaskService {
   }
 
   findById(id: number) {
-    return this.tasks.find((task) => task.id === id);
+    const task = this.tasks.find((task) => task.id === id);
+    
+    if(!task) {
+      throw new NotFoundException('Task not found')
+    }
+    return task
   }
 
   create(dto: CreateTaskDto) {
@@ -38,5 +44,15 @@ export class TaskService {
     
     this.tasks.push(newTask)
     return this.tasks;
+  }
+
+  update(id: number, dto: UpdateTaskDto) {
+    const { title, isCompleted } = dto;
+    const task = this.findById(id);
+
+    task.title = title;
+    task.isCompleted = isCompleted;
+
+    return task;
   }
 }
